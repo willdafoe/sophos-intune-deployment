@@ -35,7 +35,7 @@ jobs:
           $InputFolder="${{ env.inputfolder }}"
           $OutputFolder="${{ env.outputfolder }}"
 
-          IntuneWinPackage.ps1 -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
+          ./IntuneWinPackage.ps1 -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
 
           $ArtifactPath=(Get-Item -Path "$InputFolder\*.intunewin").FullName
 
