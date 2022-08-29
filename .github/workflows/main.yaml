@@ -39,7 +39,9 @@ jobs:
           $OutputFolder="${{ env.outputfolder }}"
 
           .\IntuneWinPackage.ps1 -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
-
+      - name: Get Artifact Path
+        run: |
+          $OutputFolder="${{ env.outputfolder }}"
           $ArtifactPath=Test-Path -Path "$OutputFolder\*.intunewin"
 
           If ($ArtifactPath){
