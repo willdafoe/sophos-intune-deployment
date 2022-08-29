@@ -37,7 +37,7 @@ jobs:
           $InputFolder="${{ env.inputfolder }}"
           $OutputFolder="${{ env.outputfolder }}"
 
-          "$PSScriptRoot/IntuneWinPackage.ps1" -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
+          "$PSScriptRoot/IntuneWinPackage.ps1"
 
           $ArtifactPath=(Get-Item -Path "$InputFolder\*.intunewin").FullName
 
