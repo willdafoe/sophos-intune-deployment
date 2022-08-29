@@ -42,9 +42,9 @@ jobs:
       - name: Get Artifact Path
         run: |
           $OutputFolder="${{ env.outputfolder }}"
-          $ArtifactPath=Test-Path -Path "$OutputFolder\*.intunewin"
+          $ArtifactPath=(Get-Item -Path $OutputFolder\*.intunewin).FullName
 
-          If ($ArtifactPath){
+          If (Test-Path -Path $ArtifactPath){
             echo $ArtifactPath
             echo "artifact=$ArtifactPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           } else {
