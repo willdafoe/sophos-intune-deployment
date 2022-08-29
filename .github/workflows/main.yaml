@@ -23,6 +23,7 @@ jobs:
       - name: Check for previous artifacts
         id: download
         uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
         with:
           github_token: ${{ github.token }}
           name: intunewin
