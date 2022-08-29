@@ -1,0 +1,52 @@
+name: Build Intune Installation Package
+
+on:
+  pull_request:
+    branches: [build]
+
+env:
+  setupfile: "install-sophos.cmd"
+  inputfolder: "./input"
+  outputfolder: "./output"
+
+jobs:
+  build:
+    strategy:
+      fail-fase: false
+      matrix:
+        os: [ubuntu-latest,windows-latest,windows-2019,macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check for previous artifacts
+        id: download
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ github.token }}
+          name: intunewin
+          path: ./
+          check_artifacts: true
+      - name: Run Intune WinApp Utility
+        run: |
+          $SetupFile="${{ env.setupfile }}"
+          $InputFolder="${{ env.inputfolder }}"
+          $OutputFolder="${{ env.outputfolder }}"
+
+          IntuneWinPackage.ps1 -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
+
+          $ArtifactPath=(Get-Item -Path "$InputFolder\*.intunewin").FullName
+
+          If (Test-Path -Path $ArtifactPath){
+            echo "artifact=$ArtifactPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          }
+          echo $env:GITHUB_ENV
+        env:
+          setupfile: "install-sophos.cmd"
+          inputfolder: "./input"
+          outputfolder: "./output"
+
+
+
+
