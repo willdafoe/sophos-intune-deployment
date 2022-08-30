@@ -3,8 +3,6 @@ name: Build Intune Installation Package
 on:
   pull_request:
     branches: [build]
-  push:
-    branches: [dev]
 
 env:
   setupfile: "SophosSetup.exe"
