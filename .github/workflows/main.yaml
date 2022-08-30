@@ -7,7 +7,7 @@ on:
     branches: [dev]
 
 env:
-  setupfile: "install-sophos.cmd"
+  setupfile: "SophosSetup.exe"
   inputfolder: "./input"
   outputfolder: "./output"
 
