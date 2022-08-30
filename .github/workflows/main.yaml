@@ -1,0 +1,57 @@
+name: Build Intune Installation Package
+
+on:
+  pull_request:
+    branches: [build]
+
+env:
+  setupfile: "SophosSetup.exe"
+  inputfolder: "./input"
+  outputfolder: "./output"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest,windows-2019]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check for previous artifacts
+        id: download
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          github_token: ${{ github.token }}
+          name: intunewin
+          path: ./
+          check_artifacts: true
+      - name: Run Intune WinApp Utility
+        id: script
+        run: |
+          $SetupFile="${{ env.setupfile }}"
+          $InputFolder="${{ env.inputfolder }}"
+          $OutputFolder="${{ env.outputfolder }}"
+
+          .\IntuneWinPackage.ps1 -SetupFile $SetupFile -InputFolder $InputFolder -OutputFolder $OutputFolder
+      - name: Get Artifact Path
+        run: |
+          $OutputFolder="${{ env.outputfolder }}"
+          $ArtifactPath=(Get-Item -Path $OutputFolder\*.intunewin).FullName
+
+          If (Test-Path -Path $ArtifactPath){
+            echo $ArtifactPath
+            echo "artifact=$ArtifactPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } else {
+            echo "Artifact does not exist!"
+          }
+          echo $env:GITHUB_ENV
+      - name: Upload intunewin file as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: intunewin
+          path: ${{ env.artifact }}
+          if-no-files-found: error
