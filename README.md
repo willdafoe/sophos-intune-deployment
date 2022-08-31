@@ -7,11 +7,11 @@
 
 # Table of Contents
 ## 1. [Introduction](#introduction)
-## 2. [Manual](#manual)
+## 2. [Manual Procedure](#manual)
 1. [Pre-Reqs](#pre_reqs)
 2. [Download Sophos Endpoint Installer](#download_endpoint)
 3. [Download Microsoft Win32 Content Prep Tool](#download_win32_app_util)
-
+4. [Create Application in Endpoint Manager](#endpoint_manager)
 
 ## Introduction
 
@@ -47,6 +47,14 @@ The contents of the file should look like this:
 ![Install Command](./assets/images/OqfFG04QTD.png)
 
 Save the file and close the text editor.
+
+Finally, create another file called ***detection_script.ps1*** in the ***Sophos*** directory with the following contents in the file:
+
+```sh
+f (Test-Path "$env:programfiles(x86)\Sophos"){
+    Write-Host "Found it!"
+}
+```
 ### Download Sophos Endpoint Installer<a name="download_endpoint"></a>
 Log in to Sophos Central, and navigate to ***Protect Devices***.
 
@@ -121,6 +129,43 @@ Once the command runs, output will display in your Powershell window:
 ![Intune Win App Output](./assets/images/BMh8jG4STG.png)
 
 You will also have an artifact in the ***output*** directory with a file named ***SophosSetup.intunewin***
+
+### Create Application in Endpoint Manager<a name="endpoint_manager"></a>
+
+* Log-in to the [Endpoint Manager Console](https://endpoint.microsoft.com/#home), and navigate to ***Apps > All apps > add***.
+* In the ***App type*** drop-down, select Windows app (Win32) as the App type.
+
+![App Type](./assets/images/iJISkFCYkQ.png)
+
+* Select the .intunewin file created previously as the app. package
+
+![App Package](./assets/images/fqMmHUoB5k.png)
+
+* In the app information tab, specify Sophos as the publisher as ***Publisher*** is a required field.
+
+![App Informatio](./assets/images/Uj49LzZ0w9.png)
+
+* Click ***Next***, and then specify the following values for the install command and uninstall command:
+
+![Commands](./assets/images/AtMec7nQjR.png)
+
+Leave all of the other fields as default, and click ***Next***
+
+* In the ***Requirements*** tab, Select both 32-bit and 64-bit Operating System Architectures and specify your Minimum Operating System version.
+
+* In the detection rules, change the ***Rules format*** to use a custom script. Select the ***detection_script.ps1*** file we created earlier. Leave the remaining settings as default, and click ***Next***
+
+* Click ***Next*** again on the ***Supersedence*** tab.
+
+* Assign the app. as needed in the ***Assignments*** tab, and click ***Next***
+
+* On the ***Review and Create*** tab, click ***Create***
+
+
+
+
+
+
 
 ### [Demo](demo_url)
 
