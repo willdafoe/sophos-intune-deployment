@@ -57,9 +57,9 @@ function detect_sophos(){
 
     if (($service) -and ($file)){
         Write-Output "Sophos is installed, exiting"
-        #exit 0
+        exit 0
     } else {
-        #exit 1
+        exit 1
     }
 }
 
