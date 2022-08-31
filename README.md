@@ -51,9 +51,19 @@ Save the file and close the text editor.
 Finally, create another file called ***detection_script.ps1*** in the ***Sophos*** directory with the following contents in the file:
 
 ```sh
-f (Test-Path "$env:programfiles(x86)\Sophos"){
-    Write-Host "Found it!"
+function detect_sophos(){
+    $service = Get-Service -Name "Sophos Endpoint Defense Service"
+    $file = "C:\Program Files\Sophos\Endpoint Defense\SEDService.exe"
+
+    if (($service) -and ($file)){
+        Write-Output "Sophos is installed, exiting"
+        #exit 0
+    } else {
+        #exit 1
+    }
 }
+
+detect_sophos
 ```
 ### Download Sophos Endpoint Installer<a name="download_endpoint"></a>
 Log in to Sophos Central, and navigate to ***Protect Devices***.
@@ -162,19 +172,6 @@ Leave all of the other fields as default, and click ***Next***
 * On the ***Review and Create*** tab, click ***Create***
 
 
-
-
-
-
-
-### [Demo](demo_url)
-
-## Usage
-
-
-```sh
-usage
-```
 
 ## Author
 
